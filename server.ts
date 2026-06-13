@@ -499,8 +499,10 @@ async function connectToPostgreSQL() {
 
   try {
     console.log("[Database] Connecting to PostgreSQL Cloud...");
+    const hasSsl = dbUrl.includes("sslmode=") || dbUrl.includes("neon.tech") || dbUrl.includes("amazonaws.com") || dbUrl.includes("render.com");
     dbPool = new Pool({
       connectionString: dbUrl,
+      ssl: hasSsl ? { rejectUnauthorized: false } : undefined,
       connectionTimeoutMillis: 15000,
       idleTimeoutMillis: 30000,
       max: 10
